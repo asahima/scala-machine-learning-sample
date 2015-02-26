@@ -2,28 +2,28 @@ package jp.asahima
 
 import scala.math.{sqrt}
 
-case class Data(x: Int, y: Int)
+case class Data(x: Double, y: Double)
 
 case class Cluster(datas: Array[Data]) {
-  var datas = datas
-
   def centroid(): Data = {
-    val x = datas.map { datas => datas.x }.sum / datas.length
-    val y = datas.map { datas => datas.y }.sum / datas.length
+    val x = datas.map { data => data.x }.sum / datas.length
+    val y = datas.map { data => data.y }.sum / datas.length
     Data(x, y)
   }
 
   def add(cluster: Cluster): Unit = {
-    datas = datas ++ cluster.datas
+    datas ++ cluster.datas
   }
 }
 
-class HC(val clusters: Array[clusters], num: Int) {
-  def run(): Array[Cluster] = {
-    val minLength = Double.MaxValue
+object HC {
+  def run(datas : Array[Data], num : Int): Array[Cluster] = {
+    var clusters = init(datas)
+    var minLength = Double.MaxValue
     var c1 = 0
     var c2 = 0
 
+    // not yet implemented
     for (i <- 0 until datas.length; j <- 0 until i) {
       var distance = getDistance(datas(i), datas(j))
       if (minLength > distance) {
@@ -32,6 +32,11 @@ class HC(val clusters: Array[clusters], num: Int) {
         c2 = j
       }
     }
+    clusters
+  }
+
+  def init(datas: Array[Data]): Array[Cluster] = {
+    datas.map { data => Cluster(Array[Data](data)) }
   }
 
   def getDistance(d1: Data, d2: Data): Double = {
